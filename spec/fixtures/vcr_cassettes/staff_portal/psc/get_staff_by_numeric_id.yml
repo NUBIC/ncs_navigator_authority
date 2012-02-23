@@ -1,0 +1,34 @@
+--- 
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :get
+    uri: https://psc_application:psc_application@staffportal.local/staff/1234.json
+    body: 
+    headers: 
+      authorization: 
+      - Basic cHNjX2FwcGxpY2F0aW9uOnBzY19hcHBsaWNhdGlvbg==
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: OK
+    headers: 
+      x-ua-compatible: 
+      - IE=Edge
+      etag: 
+      - "\"f04b7b89ad94f128111bd492c607aea8\""
+      content-type: 
+      - application/json; charset=utf-8
+      x-runtime: 
+      - "0.158153"
+      server: 
+      - WEBrick/1.3.1 (Ruby/1.8.7/2011-02-18)
+      date: 
+      - Tue, 14 Feb 2012 21:29:17 GMT
+      content-length: 
+      - "726"
+      set-cookie: 
+      - _OMA_session=BAh7ByIZYWtlci5sYXN0X3JlcXVlc3RfYXRsKwct0jpPIg9zZXNzaW9uX2lkIiVhZDA1MDFkNjliOGVlNzQ4ZTM1YzAxNTE4ZjUzYTg1ZQ%3D%3D--caebedd876b8782cf8fa262c3ec5a561315803e8; path=/; HttpOnly
+      cache-control: 
+      - max-age=0, private, must-revalidate
+    body: "{\"notify\":true,\"study_center\":20000029,\"ncs_inactive_date\":null,\"staff_type_other\":null,\"roles\":[{\"name\":\"System Administrator\"},{\"name\":\"User Administrator\"},{\"name\":\"Staff Supervisor\"},{\"name\":\"Field Staff\"},{\"name\":\"Phone Staff\"},{\"name\":\"Outreach Staff\"},{\"name\":\"Administrative Staff\"},{\"name\":\"Biological Specimen Collector\"},{\"name\":\"Specimen Processor\"},{\"name\":\"Data Manager\"}],\"ethnicity\":null,\"zipcode\":null,\"numeric_id\":1234, \"race_other\":null,\"username\":\"testuser\",\"gender\":null,\"external\":false,\"staff_type\":null,\"languages\":[],\"last_name\":\"TestLastName\",\"subcontractor\":null,\"race\":null,\"experience\":null,\"email\":\"testuser@test.com\",\"first_name\":\"TestFirstName\",\"ncs_active_date\":null}"
+    http_version: "1.1"
