@@ -1,4 +1,4 @@
-
+require 'ncs_navigator/configuration'
 module NcsNavigator::Authorization::Psc
   class Authority
     def initialize(ignored_config=nil)
