@@ -1,4 +1,6 @@
-module NcsNavigator::StaffPortal
+require 'faraday'
+
+module NcsNavigator::Authorization::StaffPortal
   class AkerToken < ::Faraday::Middleware
     def initialize(app, token_or_creator)
         @app = app

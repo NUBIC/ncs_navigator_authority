@@ -1,6 +1,5 @@
-require 'ncs_navigator'
 
-module NcsNavigator::Psc
+module NcsNavigator::Authorization::Psc
   class Authority
     def initialize(ignored_config=nil)
       @staff_portal_connection ||= staff_portal_client.connection
@@ -76,7 +75,7 @@ module NcsNavigator::Psc
       end
     
       def staff_portal_client
-        NcsNavigator::StaffPortal::Client.new(NcsNavigator.configuration.staff_portal_uri, :authenticator => create_authenticator)
+        NcsNavigator::Authorization::StaffPortal::Client.new(NcsNavigator.configuration.staff_portal_uri, :authenticator => create_authenticator)
       end
     
       def create_authenticator

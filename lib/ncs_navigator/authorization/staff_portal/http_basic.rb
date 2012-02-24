@@ -1,6 +1,6 @@
 require 'base64'
 
-module NcsNavigator::StaffPortal
+module NcsNavigator::Authorization::StaffPortal
   class HttpBasic
     def initialize(app, username, password)
       @app = app

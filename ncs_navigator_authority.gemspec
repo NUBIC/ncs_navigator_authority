@@ -1,15 +1,15 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "ncs_navigator/version"
+require "ncs_navigator/authorization/version"
 
 Gem::Specification.new do |s|
   s.name        = "ncs_navigator_authority"
-  s.version     = NcsNavigatorAuthority::VERSION
+  s.version     = NcsNavigator::Authorization::VERSION
   s.authors     = ["Jalpa Patel"]
   s.email       = ["jalpa-patel@northwestern.edu"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{ncs_navigator_authority}
+  s.description = %q{ncs_navigator_authority}
 
   s.rubyforge_project = "ncs_navigator_authority"
 

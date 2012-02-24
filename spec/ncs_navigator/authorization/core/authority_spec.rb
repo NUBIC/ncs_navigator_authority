@@ -3,10 +3,10 @@ require 'aker'
 require 'vcr'
 require 'faraday'
 require 'faraday_stack'
-describe NcsNavigator::Core::Authority do
+describe NcsNavigator::Authorization::Core::Authority do
  
   before do
-    @ncs_navigator_authority = NcsNavigator::Core::Authority.new
+    @ncs_navigator_authority = NcsNavigator::Authorization::Core::Authority.new
     @user = mock(:username => "lee", :cas_proxy_ticket => "PT-cas-ticket")
   end
   

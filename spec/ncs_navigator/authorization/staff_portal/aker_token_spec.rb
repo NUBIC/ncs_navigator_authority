@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe NcsNavigator::StaffPortal::AkerToken do
+describe NcsNavigator::Authorization::StaffPortal::AkerToken do
   let(:app) { mock('app') }
   let(:env) { { :request_headers => ::Faraday::Utils::Headers.new } }
   let(:headers) { env[:request_headers] }
@@ -8,7 +8,7 @@ describe NcsNavigator::StaffPortal::AkerToken do
   before { app.stub!(:call) }
   
   describe "static token" do
-    subject { NcsNavigator::StaffPortal::AkerToken.new(app, 'jo-9') }
+    subject { NcsNavigator::Authorization::StaffPortal::AkerToken.new(app, 'jo-9') }
   
     it 'adds the appropriate Authorization header' do
       subject.call(env)
@@ -19,7 +19,7 @@ describe NcsNavigator::StaffPortal::AkerToken do
   describe "dynamic token" do
     subject do
       i = 6
-      NcsNavigator::StaffPortal::AkerToken.new(app, lambda { i += 2; i ** 2 })
+      NcsNavigator::Authorization::StaffPortal::AkerToken.new(app, lambda { i += 2; i ** 2 })
     end
 
     it 'adds the appropriate Authorization header' do

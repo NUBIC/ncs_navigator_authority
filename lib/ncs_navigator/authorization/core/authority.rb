@@ -1,6 +1,5 @@
-require 'ncs_navigator'
 
-module NcsNavigator::Core
+module NcsNavigator::Authorization::Core
   class Authority
     def initialize(ignored_config=nil)
       @groups = {}
@@ -50,7 +49,7 @@ module NcsNavigator::Core
     end
     
     def staff_portal_client(user)
-      NcsNavigator::StaffPortal::Client.new(staff_portal_uri, :authenticator => create_authenticator(user))
+      NcsNavigator::Authorization::StaffPortal::Client.new(staff_portal_uri, :authenticator => create_authenticator(user))
     end
     
     def create_authenticator(user)

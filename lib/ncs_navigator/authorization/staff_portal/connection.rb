@@ -1,6 +1,6 @@
 require 'faraday'
 require 'faraday_stack'
-module NcsNavigator::StaffPortal
+module NcsNavigator::Authorization::StaffPortal
   class Connection < ::Faraday::Connection
       def initialize(url, options)
         super do |builder|
@@ -22,9 +22,9 @@ module NcsNavigator::StaffPortal
 
         case kind
         when :basic
-          [NcsNavigator::StaffPortal::HttpBasic, *authenticator[kind]]
+          [NcsNavigator::Authorization::StaffPortal::HttpBasic, *authenticator[kind]]
         when :token
-          [NcsNavigator::StaffPortal::AkerToken, authenticator[kind]]
+          [NcsNavigator::Authorization::StaffPortal::AkerToken, authenticator[kind]]
         else
           raise "Unsupported authentication method #{kind.inspect}."
         end

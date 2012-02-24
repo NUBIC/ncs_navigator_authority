@@ -4,9 +4,9 @@ require 'vcr'
 require 'faraday'
 require 'faraday_stack'
 
-describe NcsNavigator::Psc::Authority do
+describe NcsNavigator::Authorization::Psc::Authority do
   before do
-    @psc_authority = NcsNavigator::Psc::Authority.new
+    @psc_authority = NcsNavigator::Authorization::Psc::Authority.new
   end
 
   describe "user" do
