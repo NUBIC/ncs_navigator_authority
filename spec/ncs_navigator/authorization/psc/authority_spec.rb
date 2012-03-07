@@ -41,43 +41,6 @@ describe NcsNavigator::Authorization::Psc::Authority do
       @return_user[:roles].count.should == 13
     end
     
-    describe "roles hash" do
-      [:study_creator, :study_calendar_template_builder, :study_qa_manager, :study_site_participation_administrator, 
-        :system_administrator, :data_importer, :business_administrator, :person_and_organization_information_manager].each do |key|
-        it "has #{key} if staff portal user has 'System Administrator' role" do
-          @return_user[:roles].has_key?(key).should == true
-        end
-      end
-      
-      it "has user_administrator if staff portal user has 'User Administrator' role" do
-        @return_user[:roles].has_key?(:user_administrator).should == true
-      end
-      
-      it "has study_team_administrator if staff portal user has 'Staff Supervisor' role" do
-        @return_user[:roles].has_key?(:study_team_administrator).should == true
-      end
-      
-      it "has study_subject_calendar_manager if staff portal user has 'Biological Specimen Collector' role" do
-        @return_user[:roles].has_key?(:study_subject_calendar_manager).should == true
-      end
-      
-      it "has data_reader if staff portal user has 'Data Manager' role" do
-        @return_user[:roles].has_key?(:data_reader).should == true
-      end
-      
-      [:subject_manager, :study_subject_calendar_manager].each do |key|
-        it "has #{key} if staff portal user has 'Field Staff' role" do
-          @return_user[:roles].has_key?(key).should == true
-        end
-      end
-      
-      [:subject_manager, :study_subject_calendar_manager].each do |key|
-        it "has #{key} if staff portal user has 'Phone Staff' role" do
-          @return_user[:roles].has_key?(key).should == true
-        end
-      end
-    end
-    
     it "does nothing for an unknown user and return nil" do
       VCR.use_cassette('staff_portal/psc/get_unknown_staff') do
         @return_user = @psc_authority.user("unknown")
@@ -137,5 +100,37 @@ describe NcsNavigator::Authorization::Psc::Authority do
       end
       @return_user.should == nil
     end
+  end
+  
+  describe "get_user_by_role" do
+    it "returns empty array for unknown role" do
+      return_user = @psc_authority.get_users_by_role(:unknown)
+      return_user.should be_empty
+    end
+    
+    describe "for valid role" do
+      before do
+        VCR.use_cassette('staff_portal/psc/get_staff_by_role') do
+          @return_users = @psc_authority.get_users_by_role(:subject_manager)
+        end
+      end
+    
+      it "returns users with roles" do
+        @return_users.count.should == 2
+      end
+    
+      [:username, :id, :first_name, :email_address, :first_name, :last_name, :roles].each do |key|
+        it "has #{key}" do
+          @return_users[0].has_key?(key).should == true
+        end
+      end
+      
+      it "returns empty array if no users with role" do
+        VCR.use_cassette('staff_portal/psc/get_empty_staff_by_role') do
+          @return_user = @psc_authority.get_users_by_role(:subject_manager)
+        end
+        @return_user.should be_empty
+      end
+    end    
   end
 end
