@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Jalpa Patel"]
   s.email       = ["jalpa-patel@northwestern.edu"]
   s.homepage    = ""
-  s.summary     = %q{ncs_navigator_authority}
-  s.description = %q{ncs_navigator_authority}
+  s.summary     = %q{Authorization module for NCS Navigator}
+  s.description = %q{This is a shared library which consume Staff Portal's authorization API and provides group membership information for the NcsNavigator portal and role authorization mapping for PSC.} 
 
   s.rubyforge_project = "ncs_navigator_authority"
 
