@@ -12,7 +12,7 @@ describe NcsNavigator::Authorization::Core::Authority do
   
   describe "user" do
     before do
-      VCR.use_cassette('staff_portal/core/get_staff') do
+      VCR.use_cassette('staff_portal/core/user') do
         @return_user = @ncs_navigator_authority.user(@user)
       end
     end
@@ -42,7 +42,7 @@ describe NcsNavigator::Authorization::Core::Authority do
     end
   
     def actual
-      VCR.use_cassette('staff_portal/core/get_staff') do
+      VCR.use_cassette('staff_portal/core/user') do
         @ncs_navigator_authority.amplify!(@before_lee)
       end
     end
@@ -56,7 +56,7 @@ describe NcsNavigator::Authorization::Core::Authority do
     end
     
     it "does nothing for an unknown user" do
-      VCR.use_cassette('staff_portal/core/get_unknown_staff') do
+      VCR.use_cassette('staff_portal/core/unknown_user') do
         lambda { @ncs_navigator_authority.amplify!(mock(Aker::User, :username => "lees", :cas_proxy_ticket => "PT-cas-ticket"))}.should_not raise_error
       end
     end

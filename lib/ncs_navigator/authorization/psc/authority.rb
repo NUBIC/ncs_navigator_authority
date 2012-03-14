@@ -14,7 +14,7 @@ module NcsNavigator::Authorization::Psc
     end
         
     def get_users_by_role(role_name)
-      users = get_staff_by_role(role_name) 
+      users = get_users_collection_by_role(role_name) 
       users_hash = []
       users.each do |u|
         users_hash << user_hash(u)
@@ -23,11 +23,11 @@ module NcsNavigator::Authorization::Psc
     end
 
     def search_users(criteria)
-      nil
+      get_users_by_search_criteria(criteria)
     end
     
     def user(staff)
-      user_hash(get_staff_by_username_or_id(staff))
+      user_hash(get_user_by_username_or_id(staff))
     end
     
     private
@@ -78,12 +78,12 @@ module NcsNavigator::Authorization::Psc
         end
       end
       
-      def get_staff_by_username_or_id(staff)
+      def get_user_by_username_or_id(staff)
         url = '/staff/' << staff.to_s << '.json'
         get_staff(url)
       end
       
-      def get_staff_by_role(psc_role)
+      def get_users_collection_by_role(psc_role)
         roles = RoleMapping.psc_to_staff_portal(psc_role)
         return roles if roles.empty?
         query = 'role[]='
@@ -93,8 +93,45 @@ module NcsNavigator::Authorization::Psc
             query << '&role[]='
           end
         end
-        url = '/staff/by_roles.json?' << query
+        url = '/users.json?' << query
         get_staff(url)
+      end
+      
+      def get_users_by_search_criteria(criteria)
+        url = '/users.json'
+        unless criteria.empty?
+          url << "?" << construct_query(criteria)
+        end
+        get_staff(url)
+      end
+      
+      def construct_query(criteria)
+        operator = "&"
+        if criteria.has_key?(:first_name_substring)
+          query = get_search_query("first_name", criteria[:first_name_substring])
+          if criteria.has_key?(:last_name_substring)
+            query << operator
+            query << get_search_query("last_name", criteria[:last_name_substring])
+          end
+          if criteria.has_key?(:username_substring)
+            query << operator
+            query << get_search_query("username", criteria[:username_substring])
+          end
+        elsif criteria.has_key?(:last_name_substring)
+          query = get_search_query("last_name", criteria[:last_name_substring])
+          if criteria.has_key?(:username_substring)
+            query << operator
+            query << get_search_query("username", criteria[:username_substring])
+          end
+        elsif criteria.has_key?(:username_substring)
+          query = get_search_query("username", criteria[:username_substring])
+        end
+        query << "&operator=OR" if criteria.size > 1
+        query
+      end
+      
+      def get_search_query(key, value)
+        query = "#{key}=" << value
       end
   end
   

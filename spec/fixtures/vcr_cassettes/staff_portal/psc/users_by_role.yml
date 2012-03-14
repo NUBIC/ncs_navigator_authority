@@ -2,7 +2,7 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :get
-    uri: https://psc_application:psc_application@staffportal.local/staff/by_roles.json?role%5B%5D=Field%20Staff&role%5B%5D=Phone%20Staff
+    uri: https://psc_application:psc_application@staffportal.local/users.json?role%5B%5D=Field%20Staff&role%5B%5D=Phone%20Staff
     body: 
     headers: 
       authorization: 

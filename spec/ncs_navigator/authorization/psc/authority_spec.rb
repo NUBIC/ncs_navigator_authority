@@ -11,7 +11,7 @@ describe NcsNavigator::Authorization::Psc::Authority do
 
   describe "user" do
     before do
-      VCR.use_cassette('staff_portal/psc/get_staff_by_numeric_id') do
+      VCR.use_cassette('staff_portal/psc/user_by_numeric_id') do
         @return_user = @psc_authority.user(1234)
       end
     end
@@ -42,7 +42,7 @@ describe NcsNavigator::Authorization::Psc::Authority do
     end
     
     it "does nothing for an unknown user and return nil" do
-      VCR.use_cassette('staff_portal/psc/get_unknown_staff') do
+      VCR.use_cassette('staff_portal/psc/unknown_user') do
         @return_user = @psc_authority.user("unknown")
       end
       @return_user.should == nil
@@ -52,7 +52,7 @@ describe NcsNavigator::Authorization::Psc::Authority do
   describe "get_user_by_username" do
     describe "for valid username" do
       before do
-        VCR.use_cassette('staff_portal/psc/get_staff_by_username') do
+        VCR.use_cassette('staff_portal/psc/user_by_username') do
           @return_user = @psc_authority.get_user_by_username("testuser", nil)
         end
       end
@@ -68,7 +68,7 @@ describe NcsNavigator::Authorization::Psc::Authority do
     end
     
     it "returns nil for unknown username" do
-      VCR.use_cassette('staff_portal/psc/get_unknown_staff') do
+      VCR.use_cassette('staff_portal/psc/unknown_user') do
         @return_user = @psc_authority.get_user_by_username("unknown", nil)
       end
       @return_user.should == nil
@@ -78,7 +78,7 @@ describe NcsNavigator::Authorization::Psc::Authority do
   describe "get_user_by_id" do
     describe "for valid id" do
       before do
-        VCR.use_cassette('staff_portal/psc/get_staff_by_numeric_id') do
+        VCR.use_cassette('staff_portal/psc/user_by_numeric_id') do
           @return_user = @psc_authority.get_user_by_id(1234, nil)
         end
       end
@@ -95,22 +95,22 @@ describe NcsNavigator::Authorization::Psc::Authority do
     end
     
     it "returns nil for unknown username" do
-      VCR.use_cassette('staff_portal/psc/get_unknown_staff') do
+      VCR.use_cassette('staff_portal/psc/unknown_user') do
         @return_user = @psc_authority.get_user_by_id("unknown", nil)
       end
       @return_user.should == nil
     end
   end
   
-  describe "get_user_by_role" do
+  describe "get_users_by_role" do
     it "returns empty array for unknown role" do
-      return_user = @psc_authority.get_users_by_role(:unknown)
-      return_user.should be_empty
+      return_users = @psc_authority.get_users_by_role(:unknown)
+      return_users.should be_empty
     end
     
     describe "for valid role" do
       before do
-        VCR.use_cassette('staff_portal/psc/get_staff_by_role') do
+        VCR.use_cassette('staff_portal/psc/users_by_role') do
           @return_users = @psc_authority.get_users_by_role(:subject_manager)
         end
       end
@@ -126,11 +126,161 @@ describe NcsNavigator::Authorization::Psc::Authority do
       end
       
       it "returns empty array if no users with role" do
-        VCR.use_cassette('staff_portal/psc/get_empty_staff_by_role') do
-          @return_user = @psc_authority.get_users_by_role(:subject_manager)
+        VCR.use_cassette('staff_portal/psc/empty_users_by_role') do
+          @return_users = @psc_authority.get_users_by_role(:subject_manager)
         end
-        @return_user.should be_empty
+        @return_users.should be_empty
       end
     end    
+  end
+  
+  describe "search_users" do
+    it "returns all the users for empty hash" do
+      VCR.use_cassette('staff_portal/psc/all_users') do
+        @return_users = @psc_authority.search_users({})
+      end
+      @return_users.count.should == 6
+    end
+    
+    describe "with first_name" do
+      before do
+        VCR.use_cassette('staff_portal/psc/users_by_first_name') do
+          @return_users = @psc_authority.search_users({:first_name_substring => "an"})
+        end
+      end
+      
+      it "returns all the users with first_name criteria match" do
+        @return_users.count.should == 2
+      end
+      
+      it "has user with first_name match with criteria" do
+        @return_users[0]["first_name"].should == "Nolan"
+        @return_users[1]["first_name"].should == "Lithan"
+      end
+    end
+    
+    describe "with last_name" do
+      before do
+        VCR.use_cassette('staff_portal/psc/users_by_last_name') do
+          @return_users = @psc_authority.search_users({:last_name_substring => "Palbo"})
+        end
+      end
+      
+      it "returns all the users with last_name criteria match" do
+        @return_users.count.should == 1
+      end
+      
+      it "has user with last_name match with criteria" do
+        @return_users[0]["last_name"].should == "Palbo"
+      end
+    end
+    
+    describe "with username" do
+      before do
+        VCR.use_cassette('staff_portal/psc/users_by_username') do
+          @return_users = @psc_authority.search_users({:username_substring => "gd123"})
+        end
+      end
+      
+      it "returns all the users with username criteria match" do
+        @return_users.count.should == 1
+      end
+      
+      it "has user with username match with criteria" do
+        @return_users[0]["username"].should == "gd123"
+      end
+    end
+    
+    describe "with first_name or last_name" do
+      before do
+        VCR.use_cassette('staff_portal/psc/users_by_first_or_last_name') do
+          @return_users = @psc_authority.search_users({:first_name_substring => "Lithan", :last_name_substring => "Palbo"})
+        end
+      end
+      
+      it "returns all the users with first_name or last_name criteria match" do
+        @return_users.count.should == 2
+      end
+      
+      it "has user with first_name match with criteria" do
+        @return_users[1]["first_name"].should == "Lithan"
+      end
+      
+      it "has user with last_name match with criteria" do
+        @return_users[0]["last_name"].should == "Palbo"
+      end
+    end
+    
+    describe "with first_name or username" do
+      before do
+        VCR.use_cassette('staff_portal/psc/users_by_first_or_user_name') do
+          @return_users = @psc_authority.search_users({:first_name_substring => "Lithan", :username_substring => "gd123"})
+        end
+      end
+      
+      it "returns all the users with first_name or username criteria match" do
+        @return_users.count.should == 2
+      end
+      
+      it "has user with username match with criteria" do
+        @return_users[0]["username"].should == "gd123"
+      end
+      
+      it "has user with first_name match with criteria" do
+        @return_users[1]["first_name"].should == "Lithan"
+      end
+    end
+    
+    describe "with last_name or username" do
+      before do
+        VCR.use_cassette('staff_portal/psc/users_by_last_or_user_name') do
+          @return_users = @psc_authority.search_users({:last_name_substring => "Palbo", :username_substring => "gd123"})
+        end
+      end
+      
+      it "returns all the users with last_name or username criteria match" do
+        @return_users.count.should == 2
+      end
+      
+      it "has user with username match with criteria" do
+        @return_users[1]["username"].should == "gd123"
+      end
+      
+      it "has user with last_name match with criteria" do
+        @return_users[0]["last_name"].should == "Palbo"
+      end
+    end
+    
+    describe "with first_name or last_name or username" do
+      before do
+        VCR.use_cassette('staff_portal/psc/users_by_first_or_last_or_user_name') do
+          @return_users = @psc_authority.search_users({:first_name_substring => "Lithan", :last_name_substring => "Palbo", :username_substring => "gd123"})
+        end
+      end
+      
+      it "returns all the users with first_name or last_name or username criteria match" do
+        @return_users.count.should == 3
+      end
+      
+      it "has user with username match with criteria" do
+        @return_users[1]["username"].should == "gd123"
+      end
+      
+      it "has user with last_name match with criteria" do
+        @return_users[0]["last_name"].should == "Palbo"
+      end
+      
+      it "has user with first_name match with criteria" do
+        @return_users[2]["first_name"].should == "Lithan"
+      end
+    end
+    
+    it "returns empty array if no users with match with search criteria" do
+      VCR.use_cassette('staff_portal/psc/empty_users_by_search_criteria') do
+        @return_users = @psc_authority.search_users({:first_name_substring => "unknown", :last_name_substring => "unknown", :username_substring => "unknown"})
+      end
+      @return_users.should be_empty
+    end
+
   end
 end
