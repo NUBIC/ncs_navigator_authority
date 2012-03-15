@@ -18,9 +18,7 @@ module NcsNavigator::Authorization::Psc
     end
 
     def search_users(criteria)
-      users = users_hash(get_users_by_search_criteria(criteria))
-      p users
-      users
+      users_hash(get_users_by_search_criteria(criteria))
     end
     
     def user(staff)
