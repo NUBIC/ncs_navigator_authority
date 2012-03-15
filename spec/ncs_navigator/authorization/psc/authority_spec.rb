@@ -154,8 +154,14 @@ describe NcsNavigator::Authorization::Psc::Authority do
       end
       
       it "has user with first_name match with criteria" do
-        @return_users[0]["first_name"].should == "Nolan"
-        @return_users[1]["first_name"].should == "Lithan"
+        @return_users[0][:first_name].should == "Nolan"
+        @return_users[1][:first_name].should == "Lithan"
+      end
+      
+      [:username, :id, :first_name, :email_address, :first_name, :last_name, :roles].each do |key|
+        it "user has #{key}" do
+          @return_users[0].has_key?(key).should == true
+        end
       end
     end
     
@@ -171,7 +177,7 @@ describe NcsNavigator::Authorization::Psc::Authority do
       end
       
       it "has user with last_name match with criteria" do
-        @return_users[0]["last_name"].should == "Palbo"
+        @return_users[0][:last_name].should == "Palbo"
       end
     end
     
@@ -187,7 +193,7 @@ describe NcsNavigator::Authorization::Psc::Authority do
       end
       
       it "has user with username match with criteria" do
-        @return_users[0]["username"].should == "gd123"
+        @return_users[0][:username].should == "gd123"
       end
     end
     
@@ -203,11 +209,11 @@ describe NcsNavigator::Authorization::Psc::Authority do
       end
       
       it "has user with first_name match with criteria" do
-        @return_users[1]["first_name"].should == "Lithan"
+        @return_users[1][:first_name].should == "Lithan"
       end
       
       it "has user with last_name match with criteria" do
-        @return_users[0]["last_name"].should == "Palbo"
+        @return_users[0][:last_name].should == "Palbo"
       end
     end
     
@@ -223,11 +229,11 @@ describe NcsNavigator::Authorization::Psc::Authority do
       end
       
       it "has user with username match with criteria" do
-        @return_users[0]["username"].should == "gd123"
+        @return_users[0][:username].should == "gd123"
       end
       
       it "has user with first_name match with criteria" do
-        @return_users[1]["first_name"].should == "Lithan"
+        @return_users[1][:first_name].should == "Lithan"
       end
     end
     
@@ -243,11 +249,11 @@ describe NcsNavigator::Authorization::Psc::Authority do
       end
       
       it "has user with username match with criteria" do
-        @return_users[1]["username"].should == "gd123"
+        @return_users[1][:username].should == "gd123"
       end
       
       it "has user with last_name match with criteria" do
-        @return_users[0]["last_name"].should == "Palbo"
+        @return_users[0][:last_name].should == "Palbo"
       end
     end
     
@@ -263,15 +269,15 @@ describe NcsNavigator::Authorization::Psc::Authority do
       end
       
       it "has user with username match with criteria" do
-        @return_users[1]["username"].should == "gd123"
+        @return_users[1][:username].should == "gd123"
       end
       
       it "has user with last_name match with criteria" do
-        @return_users[0]["last_name"].should == "Palbo"
+        @return_users[0][:last_name].should == "Palbo"
       end
       
       it "has user with first_name match with criteria" do
-        @return_users[2]["first_name"].should == "Lithan"
+        @return_users[2][:first_name].should == "Lithan"
       end
     end
     

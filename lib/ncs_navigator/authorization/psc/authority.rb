@@ -14,16 +14,13 @@ module NcsNavigator::Authorization::Psc
     end
         
     def get_users_by_role(role_name)
-      users = get_users_collection_by_role(role_name) 
-      users_hash = []
-      users.each do |u|
-        users_hash << user_hash(u)
-      end
-      users_hash
+      users_hash(get_users_collection_by_role(role_name))
     end
 
     def search_users(criteria)
-      get_users_by_search_criteria(criteria)
+      users = users_hash(get_users_by_search_criteria(criteria))
+      p users
+      users
     end
     
     def user(staff)
@@ -31,6 +28,14 @@ module NcsNavigator::Authorization::Psc
     end
     
     private
+    
+      def users_hash(users)
+        users_hash = []
+        users.each do |u|
+          users_hash << user_hash(u)
+        end
+        users_hash
+      end
 
       def user_hash(staff)
         return nil unless staff
