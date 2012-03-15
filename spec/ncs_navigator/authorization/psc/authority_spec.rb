@@ -119,7 +119,7 @@ describe NcsNavigator::Authorization::Psc::Authority do
         @return_users.count.should == 2
       end
     
-      [:username, :id, :first_name, :email_address, :first_name, :last_name, :roles].each do |key|
+      [:username, :id, :first_name, :email_address, :last_name, :roles].each do |key|
         it "has #{key}" do
           @return_users[0].has_key?(key).should == true
         end
