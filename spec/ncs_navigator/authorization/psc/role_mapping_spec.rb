@@ -18,8 +18,8 @@ describe NcsNavigator::Authorization::Psc::RoleMapping do
       has_correct_psc_to_sp_role_mapping(:study_team_administrator, "Staff Supervisor")
     end
     
-    it "maps ':data_reader' to 'Data Manager' role" do
-      has_correct_psc_to_sp_role_mapping(:data_reader, "Data Manager")
+    it "maps ':data_reader' to 'Data Reader' role" do
+      has_correct_psc_to_sp_role_mapping(:data_reader, "Data Reader")
     end
     
     it "maps ':subject_manager' to 'Field Staff' and 'Phone Staff' roles" do
@@ -61,8 +61,8 @@ describe NcsNavigator::Authorization::Psc::RoleMapping do
       has_correct_sp_to_psc_role_mapping("Staff Supervisor", :study_team_administrator)
     end
     
-    it "maps 'Data Manager' to ':data_reader' role" do
-      has_correct_sp_to_psc_role_mapping("Data Manager", :data_reader)
+    it "maps 'Data Reader' to ':data_reader' role" do
+      has_correct_sp_to_psc_role_mapping("Data Reader", :data_reader)
     end
     
     it "maps 'Biological Specimen Collector' to ':study_subject_calendar_manager' role" do

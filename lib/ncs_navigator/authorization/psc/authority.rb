@@ -150,7 +150,7 @@ module NcsNavigator::Authorization::Psc
       when :study_team_administrator
         roles << "Staff Supervisor"
       when :data_reader
-        roles << "Data Manager"
+        roles << "Data Reader"
       when :subject_manager  
         roles << "Field Staff"
         roles << "Phone Staff"
@@ -183,7 +183,7 @@ module NcsNavigator::Authorization::Psc
          roles << :study_subject_calendar_manager
       when "Biological Specimen Collector"
         roles << :study_subject_calendar_manager
-      when "Data Manager"
+      when "Data Reader"
          roles << :data_reader
       end
       roles
