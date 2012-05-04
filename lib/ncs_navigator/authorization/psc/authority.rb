@@ -1,8 +1,10 @@
 require 'ncs_navigator/configuration'
+require 'logger'
 module NcsNavigator::Authorization::Psc
   class Authority
     def initialize(ignored_config=nil)
       @staff_portal_connection ||= staff_portal_client.connection
+      @logger = Logger.new("#{Java::JavaLang::System.getProperty('catalina.base')}/logs/ncs_navigator_authority.log")
     end
     
     def get_user_by_username(username, role_detail_level)
@@ -29,6 +31,7 @@ module NcsNavigator::Authorization::Psc
     
       def users_hash(users)
         users_hash = []
+        return users_hash unless users
         users.each do |u|
           users_hash << user_hash(u)
         end
@@ -65,7 +68,9 @@ module NcsNavigator::Authorization::Psc
       end
     
       def staff_portal_client
-        NcsNavigator::Authorization::StaffPortal::Client.new(NcsNavigator.configuration.staff_portal_uri, :authenticator => create_authenticator)
+        NcsNavigator::Authorization::StaffPortal::Client.new(NcsNavigator.configuration.staff_portal_uri, 
+        :authenticator => create_authenticator, 
+        :ssl => {:ca_file => NcsNavigator.configuration.psc['ssl_ca_file']})
       end
     
       def create_authenticator
@@ -73,12 +78,18 @@ module NcsNavigator::Authorization::Psc
       end
     
       def get_staff(url)
-        response = @staff_portal_connection.get url
-        if response.status == 200
-          response.body
-        else
-          nil
+        staff = nil
+        begin
+          response = @staff_portal_connection.get url
+          if response.status == 200
+            staff = response.body
+          else            
+            @logger.warn("#{Time.now}: Staff Portal Response: #{response.body}")
+          end
+        rescue => e
+          @logger.error("#{Time.now} : Staff Portal: #{e.class} #{e}")
         end
+        staff
       end
       
       def get_user_by_username_or_id(staff)
