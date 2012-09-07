@@ -33,7 +33,7 @@ module NcsNavigator::Authorization::Psc
         users_hash = []
         return users_hash unless users
         users.each do |u|
-          users_hash << user_hash(u)
+          users_hash << user_hash(u) if u["username"]
         end
         users_hash
       end
@@ -87,7 +87,7 @@ module NcsNavigator::Authorization::Psc
             @logger.warn("#{Time.now}: Staff Portal Response: #{response.body}")
           end
         rescue => e
-          @logger.error("#{Time.now} : Staff Portal: #{e.class} #{e}")
+          @logger.error("#{Time.now} : Staff Portal: #{e.class} #{e.backtrace}")
         end
         staff
       end

@@ -131,6 +131,13 @@ describe NcsNavigator::Authorization::Psc::Authority do
         end
         @return_users.should be_empty
       end
+
+      it "excludes the user with null username from list of users returning" do
+        VCR.use_cassette('staff_portal/psc/users_with_null_username') do
+          @return_users = @psc_authority.get_users_by_role(:subject_manager)
+        end
+        @return_users.count.should == 1
+      end
     end    
   end
   
