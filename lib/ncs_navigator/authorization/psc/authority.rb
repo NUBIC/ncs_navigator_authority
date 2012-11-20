@@ -3,8 +3,8 @@ require 'logger'
 module NcsNavigator::Authorization::Psc
   class Authority
     def initialize(ignored_config=nil)
-      @staff_portal_connection ||= staff_portal_client.connection
       @logger = Logger.new("#{Java::JavaLang::System.getProperty('catalina.base')}/logs/ncs_navigator_authority.log")
+      @staff_portal_connection ||= staff_portal_client.connection
     end
     
     def get_user_by_username(username, role_detail_level)
@@ -70,7 +70,7 @@ module NcsNavigator::Authorization::Psc
       def staff_portal_client
         NcsNavigator::Authorization::StaffPortal::Client.new(NcsNavigator.configuration.staff_portal_uri, 
         :authenticator => create_authenticator, 
-        :ssl => {:ca_file => NcsNavigator.configuration.psc['ssl_ca_file']})
+        :ssl => {:ca_file => NcsNavigator.configuration.psc['ssl_ca_file']}.tap{|a| @logger.info("#{a.inspect}")})
       end
     
       def create_authenticator
@@ -83,11 +83,12 @@ module NcsNavigator::Authorization::Psc
           response = @staff_portal_connection.get url
           if response.status == 200
             staff = response.body
+            @logger.info("#{Time.now}: Staff Portal Response: Successful connection")
           else            
             @logger.warn("#{Time.now}: Staff Portal Response: #{response.body}")
           end
         rescue => e
-          @logger.error("#{Time.now} : Staff Portal: #{e.class} #{e.backtrace}")
+          @logger.error("#{Time.now} : Staff Portal: #{e} #{e.class}")
         end
         staff
       end

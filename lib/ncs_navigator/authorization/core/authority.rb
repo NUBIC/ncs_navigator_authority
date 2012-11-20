@@ -1,4 +1,5 @@
 require 'ncs_navigator/configuration'
+require 'ncs_navigator/authorization'
 module NcsNavigator::Authorization::Core
   class Authority
     def initialize(ignored_config=nil)
