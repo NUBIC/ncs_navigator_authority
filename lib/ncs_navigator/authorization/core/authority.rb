@@ -1,10 +1,14 @@
 require 'ncs_navigator/configuration'
 module NcsNavigator::Authorization::Core
   class Authority
-    def initialize(ignored_config=nil)
-      @logger = Logger.new("ncs_navigator_authority_core.log")
+    def initialize(config=nil)
+      @logger = config.try(:logger) || Logger.new(STDERR)
       @groups = {}
       @portal = :NCSNavigator
+    end
+
+    def logger
+      @logger
     end
 
     def amplify!(user)
@@ -44,6 +48,7 @@ module NcsNavigator::Authorization::Core
       result = []
       if users = get_users
         users.each do |u|
+          next if u["username"].blank?
           au = Aker::User.new(u["username"])
           au.identifiers[:staff_id] = u["staff_id"]
           au.first_name = u["first_name"]
@@ -61,19 +66,19 @@ module NcsNavigator::Authorization::Core
     end
 
     def get_connection(user)
-      connection = staff_portal_client(user).connection
+      connection = staff_portal_client(create_authenticator(user)).connection
     end
 
-    def staff_portal_client(user = nil)
-      NcsNavigator::Authorization::StaffPortal::Client.new(staff_portal_uri, :authenticator => create_authenticator(user))
+    def staff_portal_client(authenticator)
+      NcsNavigator::Authorization::StaffPortal::Client.new(staff_portal_uri, :authenticator => authenticator)
     end
 
-    def create_authenticator(user = nil)
-      if user
-        { :token => lambda { user.cas_proxy_ticket(staff_portal_uri) } }
-      else
-        { :basic => ["psc_application", NcsNavigator.configuration.staff_portal['psc_user_password']] }
-      end
+    def create_authenticator(user)
+      { :token => lambda { user.cas_proxy_ticket(staff_portal_uri) } }
+    end
+
+    def machine_authenticator
+      { :basic => ["psc_application", NcsNavigator.configuration.staff_portal['psc_user_password']] }
     end
 
     def load_group_memberships(portal, group_data)
@@ -93,7 +98,7 @@ module NcsNavigator::Authorization::Core
 
     def get_staff(user)
       connection = get_connection(user)
-      response = connection.get '/staff/' << user.username << '.json'
+      response = make_request(connection, '/staff/' << user.username << '.json')
       if response.status == 200
         response.body
       else
@@ -101,17 +106,22 @@ module NcsNavigator::Authorization::Core
       end
     end
 
+    def make_request(connection, url)
+      connection.get(url)
+    end
+
     def get_users
       users = nil
       begin
-        response = staff_portal_client.connection.get('/users.json')
+        connection = staff_portal_client(machine_authenticator).connection
+        response = make_request(connection, '/users.json')
         if response.status == 200
           users = response.body
         else
-          @logger.warn("#{Time.now}: Staff Portal Response: #{response.body}")
+          logger.warn("#{Time.now}: Staff Portal Response: #{response.body}")
         end
       rescue => e
-        @logger.error("#{Time.now} : Staff Portal: #{e.class} #{e}")
+        logger.error("#{Time.now} : Staff Portal: #{e.class} #{e}")
       end
       users
    end

@@ -52,8 +52,23 @@ describe NcsNavigator::Authorization::Core::Authority do
         users.should be_empty
       end
     end
+
   end
 
+  describe "logger" do
+
+    it "should use the default logger" do
+      @ncs_navigator_authority.logger.should_not be_nil
+    end
+
+    it "should use the configured logger if given" do
+      logger = Logger.new("dummyfile.log")
+      auth = NcsNavigator::Authorization::Core::Authority.new(
+        mock(Aker::Configuration, :logger => logger))
+      auth.logger.should == logger
+    end
+
+  end
 
   describe "#amplify!" do
     before do
