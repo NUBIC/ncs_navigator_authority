@@ -7,11 +7,20 @@ describe NcsNavigator::Authorization::StaffPortal::HttpBasic do
   
   before { app.stub!(:call) }
   describe "token" do
-    subject { NcsNavigator::Authorization::StaffPortal::HttpBasic.new(app, 'user', 'pwd') }
-    
-    it 'adds the appropriate Authorization header' do
-      subject.call(env)
-      headers['Authorization'].should == 'Basic dXNlcjpwd2Q='
+    describe "for shoter passwrod" do
+      subject { NcsNavigator::Authorization::StaffPortal::HttpBasic.new(app, 'user', 'pwd') }
+      it 'adds the appropriate Authorization header' do
+        subject.call(env)
+        headers['Authorization'].should == 'Basic dXNlcjpwd2Q='
+      end
+    end
+
+    describe "for longer passwrod" do
+      subject { NcsNavigator::Authorization::StaffPortal::HttpBasic.new(app, 'user', 'a' * 46) }
+      it 'adds the appropriate Authorization header' do
+        subject.call(env)
+        headers['Authorization'].should == 'Basic dXNlcjphYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFh'
+      end
     end
   end
 end

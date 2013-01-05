@@ -4,7 +4,7 @@ module NcsNavigator::Authorization::StaffPortal
   class HttpBasic
     def initialize(app, username, password)
       @app = app
-      @header_value = "Basic #{Base64.encode64([username, password].join(':')).strip}"
+      @header_value = "Basic #{Base64.strict_encode64([username, password].join(':')).strip}"
     end
 
     def call(env)
