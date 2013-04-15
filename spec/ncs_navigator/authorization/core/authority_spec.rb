@@ -9,10 +9,18 @@ describe NcsNavigator::Authorization::Core::Authority do
   end
 
   describe '.initialize' do
-    it 'accepts a staff portal URI' do
+    it 'accepts a Staff Portal URI' do
       a = NcsNavigator::Authorization::Core::Authority.new(:staff_portal_uri => URI('https://navops.example.edu'))
 
       a.staff_portal_uri.should == URI('https://navops.example.edu')
+    end
+
+    it 'accepts Staff Portal credentials' do
+      a = NcsNavigator::Authorization::Core::Authority.new(:staff_portal_user => 'user',
+                                                           :staff_portal_password => 'foobar')
+
+      a.staff_portal_user.should == 'user'
+      a.staff_portal_password.should == 'foobar'
     end
   end
 
