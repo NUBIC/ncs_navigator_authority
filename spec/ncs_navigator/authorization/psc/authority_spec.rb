@@ -4,6 +4,8 @@ require 'vcr'
 
 describe NcsNavigator::Authorization::Psc::Authority do
   before do
+    pending "These must be run in a Java Ruby environment" unless RUBY_PLATFORM =~ /java/
+
     @psc_authority = NcsNavigator::Authorization::Psc::Authority.new
   end
 
