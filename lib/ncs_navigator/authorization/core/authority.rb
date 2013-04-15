@@ -1,14 +1,12 @@
 require 'ncs_navigator/configuration'
 module NcsNavigator::Authorization::Core
   class Authority
-    def initialize(config=nil)
-      @logger = config.try(:logger) || Logger.new(STDERR)
+    attr_reader :logger
+
+    def initialize(options = {})
+      @logger = options[:logger] || Logger.new($stderr)
       @groups = {}
       @portal = :NCSNavigator
-    end
-
-    def logger
-      @logger
     end
 
     def amplify!(user)

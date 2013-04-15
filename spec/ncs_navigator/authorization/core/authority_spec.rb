@@ -61,8 +61,7 @@ describe NcsNavigator::Authorization::Core::Authority do
 
     it "should use the configured logger if given" do
       logger = Logger.new("dummyfile.log")
-      auth = NcsNavigator::Authorization::Core::Authority.new(
-        mock(Aker::Configuration, :logger => logger))
+      auth = NcsNavigator::Authorization::Core::Authority.new(:logger => logger)
       auth.logger.should == logger
     end
 
