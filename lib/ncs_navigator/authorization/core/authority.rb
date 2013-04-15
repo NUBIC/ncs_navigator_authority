@@ -57,11 +57,11 @@ module NcsNavigator::Authorization::Core
       result
     end
 
-    private
-
     def staff_portal_uri
       NcsNavigator.configuration.staff_portal_uri
     end
+
+    private
 
     def get_connection(user)
       connection = staff_portal_client(create_authenticator(user)).connection

@@ -8,6 +8,14 @@ describe NcsNavigator::Authorization::Core::Authority do
     @user = mock(:username => "lee", :cas_proxy_ticket => "PT-cas-ticket")
   end
 
+  describe '.initialize' do
+    it 'accepts a staff portal URI' do
+      a = NcsNavigator::Authorization::Core::Authority.new(:staff_portal_uri => URI('https://navops.example.edu'))
+
+      a.staff_portal_uri.should == URI('https://navops.example.edu')
+    end
+  end
+
   describe "user" do
     before do
       VCR.use_cassette('staff_portal/core/user') do
