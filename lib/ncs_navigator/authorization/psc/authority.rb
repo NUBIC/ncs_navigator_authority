@@ -3,7 +3,14 @@ require 'logger'
 module NcsNavigator::Authorization::Psc
   class Authority
     def initialize(ignored_config=nil)
-      @logger = Logger.new("#{Java::JavaLang::System.getProperty('catalina.base')}/logs/ncs_navigator_authority.log")
+      @logdir = Java::JavaLang::System.getProperty('catalina.base')
+
+      @logger = if !@logdir
+                  Logger.new($stderr).tap { |l| l.warn("catalina.base property not set; logging to standard error") }
+                else
+                  Logger.new("#{@logdir}/logs/ncs_navigator_authority.log")
+                end
+
       @staff_portal_connection ||= staff_portal_client.connection
     end
     
