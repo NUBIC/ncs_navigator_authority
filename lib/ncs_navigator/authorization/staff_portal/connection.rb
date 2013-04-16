@@ -1,12 +1,13 @@
 require 'faraday'
-require 'faraday_stack'
+require 'faraday_middleware'
+
 module NcsNavigator::Authorization::StaffPortal
   class Connection < ::Faraday::Connection
       def initialize(url, options)
         super do |builder|
           builder.use *authentication_middleware(options[:authenticator])
           builder.request :json
-          builder.use FaradayStack::ResponseJSON, :content_type => 'application/json'
+          builder.use FaradayMiddleware::ParseJson, :content_type => 'application/json'
           builder.adapter :net_http
         end
       end

@@ -1,8 +1,6 @@
 require 'spec_helper'
 require 'aker'
 require 'vcr'
-require 'faraday'
-require 'faraday_stack'
 
 describe NcsNavigator::Authorization::Psc::Authority do
   before do
