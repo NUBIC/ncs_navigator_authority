@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake', '~> 0.9.2'
   s.add_development_dependency 'vcr', '~> 1.0'
   s.add_development_dependency 'fakeweb'
+  s.add_development_dependency 'ci_reporter'
 
   # specify any dependencies here; for example:
   # s.add_development_dependency "rspec"

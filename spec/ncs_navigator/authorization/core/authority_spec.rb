@@ -8,6 +8,22 @@ describe NcsNavigator::Authorization::Core::Authority do
     @user = mock(:username => "lee", :cas_proxy_ticket => "PT-cas-ticket")
   end
 
+  describe '.initialize' do
+    it 'accepts a Staff Portal URI' do
+      a = NcsNavigator::Authorization::Core::Authority.new(:staff_portal_uri => URI('https://navops.example.edu'))
+
+      a.staff_portal_uri.should == URI('https://navops.example.edu')
+    end
+
+    it 'accepts Staff Portal credentials' do
+      a = NcsNavigator::Authorization::Core::Authority.new(:staff_portal_user => 'user',
+                                                           :staff_portal_password => 'foobar')
+
+      a.staff_portal_user.should == 'user'
+      a.staff_portal_password.should == 'foobar'
+    end
+  end
+
   describe "user" do
     before do
       VCR.use_cassette('staff_portal/core/user') do
@@ -61,8 +77,7 @@ describe NcsNavigator::Authorization::Core::Authority do
 
     it "should use the configured logger if given" do
       logger = Logger.new("dummyfile.log")
-      auth = NcsNavigator::Authorization::Core::Authority.new(
-        mock(Aker::Configuration, :logger => logger))
+      auth = NcsNavigator::Authorization::Core::Authority.new(:logger => logger)
       auth.logger.should == logger
     end
 

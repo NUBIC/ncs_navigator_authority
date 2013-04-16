@@ -1,14 +1,19 @@
 require 'ncs_navigator/configuration'
 module NcsNavigator::Authorization::Core
   class Authority
-    def initialize(config=nil)
-      @logger = config.try(:logger) || Logger.new(STDERR)
+    attr_reader :logger
+    attr_reader :staff_portal_uri
+    attr_reader :staff_portal_user
+    attr_reader :staff_portal_password
+
+    def initialize(options = {})
+      @logger = options[:logger] || Logger.new($stderr)
+      @staff_portal_uri = options[:staff_portal_uri] || NcsNavigator.configuration.staff_portal_uri
+      @staff_portal_user = options[:staff_portal_user] || "psc_application"
+      @staff_portal_password = options[:staff_portal_password] || NcsNavigator.configuration.staff_portal['psc_user_password']
+
       @groups = {}
       @portal = :NCSNavigator
-    end
-
-    def logger
-      @logger
     end
 
     def amplify!(user)
@@ -61,10 +66,6 @@ module NcsNavigator::Authorization::Core
 
     private
 
-    def staff_portal_uri
-      NcsNavigator.configuration.staff_portal_uri
-    end
-
     def get_connection(user)
       connection = staff_portal_client(create_authenticator(user)).connection
     end
@@ -78,7 +79,7 @@ module NcsNavigator::Authorization::Core
     end
 
     def machine_authenticator
-      { :basic => ["psc_application", NcsNavigator.configuration.staff_portal['psc_user_password']] }
+      { :basic => [staff_portal_user, staff_portal_password] }
     end
 
     def load_group_memberships(portal, group_data)
