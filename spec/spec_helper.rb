@@ -12,7 +12,8 @@ require 'ncs_navigator/authorization/staff_portal/client'
 require 'ncs_navigator/authorization/staff_portal/connection'
 require 'ncs_navigator/authorization/staff_portal/http_basic'
 
-require 'spec/support/vcr_setup.rb'
+require File.expand_path('../support/vcr_setup', __FILE__)
+
 RSpec.configure do |config|
 # config.fixture_path = "/spec/fixtures"
 end
