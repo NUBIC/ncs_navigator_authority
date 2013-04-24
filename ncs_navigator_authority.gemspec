@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   
   s.add_dependency 'ncs_navigator_configuration', '~> 0.2'
   s.add_dependency 'aker', '~> 3.0'
-  s.add_dependency 'faraday', '~> 0.7.5'
+  s.add_dependency 'faraday', '~> 0.8.0'
   s.add_dependency 'faraday_middleware'
   
   s.add_development_dependency 'rspec', '~> 2.6'
