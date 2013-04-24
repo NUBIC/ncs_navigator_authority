@@ -1,34 +1,42 @@
---- 
-- !ruby/struct:VCR::HTTPInteraction 
-  request: !ruby/struct:VCR::Request 
-    method: :get
-    uri: https://psc_application:psc_application@staffportal.local/users.json?last_name=Palbo
-    body: 
-    headers: 
-      authorization: 
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://staffportal.local/users.json?last_name=Palbo
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Authorization:
       - Basic cHNjX2FwcGxpY2F0aW9uOnBzY19hcHBsaWNhdGlvbg==
-  response: !ruby/struct:VCR::Response 
-    status: !ruby/struct:VCR::ResponseStatus 
+  response:
+    status:
       code: 200
       message: OK
-    headers: 
-      x-ua-compatible: 
+    headers:
+      X-Ua-Compatible:
       - IE=Edge
-      etag: 
-      - "\"33bac0b7c6ebd02d6dafec00470c8b01\""
-      content-type: 
+      Etag:
+      - ! '"33bac0b7c6ebd02d6dafec00470c8b01"'
+      Content-Type:
       - application/json; charset=utf-8
-      x-runtime: 
-      - "0.164258"
-      server: 
+      X-Runtime:
+      - '0.164258'
+      Server:
       - WEBrick/1.3.1 (Ruby/1.8.7/2011-02-18)
-      date: 
+      Date:
       - Tue, 13 Mar 2012 21:35:32 GMT
-      content-length: 
-      - "505"
-      set-cookie: 
-      - _OMA_session=BAh7ByIZYWtlci5sYXN0X3JlcXVlc3RfYXRsKwekvV9PIg9zZXNzaW9uX2lkIiU0ZWJjOTIxNTY0OGI5YTgzMDdkNTJhNGNhYjRhM2M3OA%3D%3D--27298574ac00c0e2f59c215c49a2c2b6b74faebb; path=/; HttpOnly
-      cache-control: 
+      Content-Length:
+      - '505'
+      Set-Cookie:
+      - _OMA_session=BAh7ByIZYWtlci5sYXN0X3JlcXVlc3RfYXRsKwekvV9PIg9zZXNzaW9uX2lkIiU0ZWJjOTIxNTY0OGI5YTgzMDdkNTJhNGNhYjRhM2M3OA%3D%3D--27298574ac00c0e2f59c215c49a2c2b6b74faebb;
+        path=/; HttpOnly
+      Cache-Control:
       - max-age=0, private, must-revalidate
-    body: "[{\"notify\":true,\"study_center\":20000029,\"roles\":[{\"name\":\"Field Staff\"},{\"name\":\"Outreach Staff\"}],\"ncs_inactive_date\":null,\"staff_type_other\":null,\"ethnicity\":null,\"staff_id\":\"5de404f5-9c37-4d92-8f2a-30041400ba06\",\"zipcode\":null,\"numeric_id\":1885042269,\"race_other\":null,\"username\":\"outreach\",\"gender\":null,\"external\":false,\"staff_type\":null,\"languages\":[],\"last_name\":\"Palbo\",\"subcontractor\":null,\"race\":null,\"experience\":null,\"email\":\"nolan_palbo@test.com\",\"first_name\":\"Nolan\",\"ncs_active_date\":null}]"
-    http_version: "1.1"
+    body:
+      encoding: UTF-8
+      string: ! '[{"notify":true,"study_center":20000029,"roles":[{"name":"Field Staff"},{"name":"Outreach
+        Staff"}],"ncs_inactive_date":null,"staff_type_other":null,"ethnicity":null,"staff_id":"5de404f5-9c37-4d92-8f2a-30041400ba06","zipcode":null,"numeric_id":1885042269,"race_other":null,"username":"outreach","gender":null,"external":false,"staff_type":null,"languages":[],"last_name":"Palbo","subcontractor":null,"race":null,"experience":null,"email":"nolan_palbo@test.com","first_name":"Nolan","ncs_active_date":null}]'
+    http_version: '1.1'
+  recorded_at: Thu, 27 Sep 2012 21:58:32 GMT
+recorded_with: VCR 2.4.0
